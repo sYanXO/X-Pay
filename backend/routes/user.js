@@ -29,10 +29,18 @@ router.post("/signup",async(req,res)=>{
         })
     }
 
+
     const dbUser = await User.create(body);
+
+
     const token = jwt.sign({
         userId:dbUser._id
     },JWT_SECRET);
+///////////////////////// added dummy balance cuz we need banking apis 2 fetch balances!!!!
+    await Account.create({
+        userId:dbUser._id,
+        balance: 1 + Math.random() * 10000
+    })
 
     res.json({
         message:"User created succesfully",
@@ -98,7 +106,7 @@ router.put("/", authMiddleware, async (req, res) => {
     })
 })
 ////////////////////////////////////////////////////
-router.get("/bulk", async (req, res) => {
+router.get("/bulk", async (req, res) => { /// this uses query params
     const filter = req.query.filter || "";
 
     const users = await User.find({
