@@ -1,6 +1,8 @@
+// backend/routes/account.js
 const express = require('express');
 const { authMiddleware } = require('../middleware');
 const { Account } = require('../db');
+const { default: mongoose } = require('mongoose');
 
 const router = express.Router();
 
@@ -45,7 +47,6 @@ router.post("/transfer", authMiddleware, async (req, res) => {
 
     // Commit the transaction
     await session.commitTransaction();
-
     res.json({
         message: "Transfer successful"
     });
